@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Command: CURL</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .slide p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .arrows {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .arrow {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            width: 60px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            position: absolute;
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .left-arrow {
+            left: 0;
+        }
+
+        .right-arrow {
+            right: 0;
+        }
+
+        .arrow img {
+            width: 30px;
+            height: 30px;
+        }
+
+        ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <div class="slides">
+            <!-- Slide 1 -->
+            <div class="slide">
+                <h2>CURL Command Overview</h2>
+                <p>
+                    The <strong>curl</strong> command in Linux is used for transferring data with URLs:
+                    <ul>
+                        <li>Supports multiple protocols like HTTP, FTP, and SFTP.</li>
+                        <li>Can send and receive data using URL syntax.</li>
+                        <li>Highly versatile for web requests and automation.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide">
+                <h2>Basic Usage</h2>
+                <p>
+                    <strong>Common Commands:</strong>
+                    <ul>
+                        <li><code>curl [url]</code>: Fetches the data from the specified URL.</li>
+                        <li><code>curl -O [url]</code>: Downloads a file and saves it with the original name.</li>
+                        <li><code>curl -o [filename] [url]</code>: Downloads a file and saves it with a custom name.</li>
+                        <li><code>curl -I [url]</code>: Fetches the headers of the specified URL.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <h2>Advanced Options</h2>
+                <p>
+                    Utilize advanced features of the <strong>curl</strong> command:
+                    <ul>
+                        <li><code>curl -u [user:password] [url]</code>: Performs authenticated requests.</li>
+                        <li><code>curl -d [data] [url]</code>: Sends data with a POST request.</li>
+                        <li><code>curl -L [url]</code>: Follows redirects automatically.</li>
+                        <li><code>curl -H [header] [url]</code>: Adds custom headers to the request.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide">
+                <h2>Use Cases</h2>
+                <p>
+                    The <strong>curl</strong> command is ideal for various use cases:
+                    <ul>
+                        <li>API testing and integration for developers.</li>
+                        <li>Website content fetching and monitoring.</li>
+                        <li>Automated file downloads and uploads.</li>
+                        <li>Sending JSON data with REST APIs.</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+        <!-- Arrows -->
+        <div class="arrows">
+            <button class="arrow left-arrow">
+                <img src="left-arrow.png" alt="Left">
+            </button>
+            <button class="arrow right-arrow">
+                <img src="right-arrow.png" alt="Right">
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelector('.slides');
+        const leftArrow = document.querySelector('.left-arrow');
+        const rightArrow = document.querySelector('.right-arrow');
+        let currentIndex = 0;
+
+        function updateSlidePosition() {
+            slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        leftArrow.addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : 0;
+            updateSlidePosition();
+        });
+
+        rightArrow.addEventListener('click', () => {
+            currentIndex = (currentIndex < slides.children.length - 1) ? currentIndex + 1 : slides.children.length - 1;
+            updateSlidePosition();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Command: Top</title>
+
+    <!-- Google Fonts -->
+     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .slide p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .arrows {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .arrow {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            width: 60px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            position: absolute;
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .left-arrow {
+            left: 0;
+        }
+
+        .right-arrow {
+            right: 0;
+        }
+
+        .arrow img {
+            width: 30px;
+            height: 30px;
+        }
+
+        ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <div class="slides">
+            <!-- Slide 1 -->
+            <div class="slide">
+                <h2>Top Command Overview</h2>
+                <p>
+                    The <strong>top</strong> command in Linux is a dynamic process viewer that provides a real-time overview of system performance:
+                    <ul>
+                        <li>Displays active processes and their resource usage.</li>
+                        <li>Shows system-wide performance metrics (CPU, memory, etc.).</li>
+                        <li>Allows users to manage and prioritize processes.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide">
+                <h2>Basic Usage</h2>
+                <p>
+                    <strong>Key Features:</strong>
+                    <ul>
+                        <li>Run <code>top</code> in the terminal to view system processes.</li>
+                        <li>Press <code>q</code> to quit the command.</li>
+                        <li>Press <code>h</code> for a help menu.</li>
+                        <li>Sort processes by CPU usage using <code>P</code>.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <h2>Advanced Options</h2>
+                <p>
+                    Explore powerful features of the <strong>top</strong> command:
+                    <ul>
+                        <li><code>k</code>: Kill a process by specifying its PID.</li>
+                        <li><code>n</code>: Change the number of displayed processes.</li>
+                        <li><code>u</code>: Filter processes by a specific user.</li>
+                        <li><code>W</code>: Save the current configuration.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide">
+                <h2>Performance Insights</h2>
+                <p>
+                    The <strong>top</strong> command provides vital system performance data:
+                    <ul>
+                        <li>CPU Usage: Per-core utilization and overall performance.</li>
+                        <li>Memory Usage: Detailed breakdown of RAM usage.</li>
+                        <li>Load Average: Tracks system load over time.</li>
+                        <li>Process Status: Real-time insights into running processes.</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+        <!-- Arrows -->
+        <div class="arrows">
+            <button class="arrow left-arrow">
+                <img src="left-arrow.png" alt="Left">
+            </button>
+            <button class="arrow right-arrow">
+                <img src="right-arrow.png" alt="Right">
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelector('.slides');
+        const leftArrow = document.querySelector('.left-arrow');
+        const rightArrow = document.querySelector('.right-arrow');
+        let currentIndex = 0;
+
+        function updateSlidePosition() {
+            slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        leftArrow.addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : 0;
+            updateSlidePosition();
+        });
+
+        rightArrow.addEventListener('click', () => {
+            currentIndex = (currentIndex < slides.children.length - 1) ? currentIndex + 1 : slides.children.length - 1;
+            updateSlidePosition();
+        });
+    </script>
+</body>
+</html>

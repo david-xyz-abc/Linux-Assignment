@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Command: Kill</title>
+
+    <!-- Google Fonts -->
+     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+             font-family: 'Ubuntu', sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .slide p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .arrows {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .arrow {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            width: 60px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            position: absolute;
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .left-arrow {
+            left: 0;
+        }
+
+        .right-arrow {
+            right: 0;
+        }
+
+        .arrow img {
+            width: 30px;
+            height: 30px;
+        }
+
+        ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <div class="slides">
+            <!-- Slide 1 -->
+            <div class="slide">
+                <h2>Kill Command Overview</h2>
+                <p>
+                    The <strong>kill</strong> command in Linux is used to terminate processes by sending signals:
+                    <ul>
+                        <li>Default signal sent is <code>SIGTERM</code> (terminate gracefully).</li>
+                        <li>Requires a process ID (PID) to target specific processes.</li>
+                        <li>Can send various signals for specific actions.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide">
+                <h2>Basic Usage</h2>
+                <p>
+                    <strong>Common Commands:</strong>
+                    <ul>
+                        <li><code>kill PID</code>: Sends <code>SIGTERM</code> to the specified process.</li>
+                        <li><code>kill -9 PID</code>: Forces termination using <code>SIGKILL</code>.</li>
+                        <li><code>kill -l</code>: Lists all available signals.</li>
+                        <li><code>kill -s SIGNAL PID</code>: Sends a specific signal to the process.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <h2>Common Signals</h2>
+                <p>
+                    The <strong>kill</strong> command supports various signals:
+                    <ul>
+                        <li><code>SIGTERM</code> (15): Requests graceful termination.</li>
+                        <li><code>SIGKILL</code> (9): Forces immediate termination.</li>
+                        <li><code>SIGHUP</code> (1): Restarts processes without terminating them.</li>
+                        <li><code>SIGSTOP</code>: Pauses a process without terminating it.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide">
+                <h2>Advanced Features</h2>
+                <p>
+                    Utilize the <strong>kill</strong> command for process control:
+                    <ul>
+                        <li>Combine with <code>ps</code> or <code>top</code> to identify PIDs.</li>
+                        <li>Use <code>killall</code> to terminate multiple processes by name.</li>
+                        <li>Script automation to manage multiple processes.</li>
+                        <li>Ensure proper permissions to avoid <code>Operation not permitted</code> errors.</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+        <!-- Arrows -->
+        <div class="arrows">
+            <button class="arrow left-arrow">
+                <img src="left-arrow.png" alt="Left">
+            </button>
+            <button class="arrow right-arrow">
+                <img src="right-arrow.png" alt="Right">
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelector('.slides');
+        const leftArrow = document.querySelector('.left-arrow');
+        const rightArrow = document.querySelector('.right-arrow');
+        let currentIndex = 0;
+
+        function updateSlidePosition() {
+            slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        leftArrow.addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : 0;
+            updateSlidePosition();
+        });
+
+        rightArrow.addEventListener('click', () => {
+            currentIndex = (currentIndex < slides.children.length - 1) ? currentIndex + 1 : slides.children.length - 1;
+            updateSlidePosition();
+        });
+    </script>
+</body>
+</html>

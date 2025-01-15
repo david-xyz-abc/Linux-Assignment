@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Command Interface</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .banner {
+            width: 100%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1.5em;
+            font-family: 'Ubuntu Mono', monospace;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+        }
+
+        .vertical-box {
+    width: 25%;
+    height: calc(100vh - 100px); /* Increased height to fill the space better */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
+    margin-top: 80px; /* Prevents clipping under the ribbon */
+    margin-left: 20px;
+    margin-bottom: 20px; /* Ensures a gap between the box and the bottom edge */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    gap: 10px;
+    overflow: hidden;
+}
+
+
+
+.content-area {
+    flex: 1; /* Make it fill the remaining space inside the main box */
+    position: relative;
+    padding: 10px; /* Add a bezel inside the content area */
+    box-sizing: border-box;
+    background-color: #f4f4f4; /* Optional: bezel color */
+    border-radius: 8px; /* Ensure the edges match the box's rounded corners */
+    overflow: hidden;
+}
+
+/* TV lip container */
+.tv-lip {
+    width: 120px; /* Width of the pill */
+    height: 30px; /* Height of the pill */
+    background-color: #ffffff; /* Pill background */
+    border-radius: 15px; /* Fully rounded pill shape */
+    position: absolute; /* Positioned relative to the viewport or closest ancestor */
+    top: calc(80px + calc((100vh - 140px) * 0.55) - 15px); /* Position it relative to the main-box */
+    left: 62.2%; /* Center horizontally */
+    transform: translateX(-50%); /* Ensure horizontal centering */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for floating effect */
+    z-index: 10; /* Ensure it floats above the main-box */
+    display: flex; /* Flex to center the content */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent content from overflowing */
+}
+
+/* Loading GIF */
+.loading-gif {
+    width: 90%; /* Slightly inset from the edges */
+    height: 70%; /* Slightly smaller height for a gap */
+    object-fit: contain; /* Ensure the GIF scales proportionally */
+    opacity: 1; /* Fully visible initially */
+    transition: opacity 0.5s ease; /* Smooth fade-out transition */
+}
+
+.gradient-pill {
+    width: 90%; /* Leave a gap between the gradient and the edges */
+    height: 70%; /* Match the inset proportions */
+    background: linear-gradient(45deg, 
+        #ff6f61,   /* Warm coral red */
+        #ffcc33,   /* Sunny yellow */
+        #33cc99,   /* Fresh mint green */
+        #6699ff,   /* Sky blue */
+        #cc66ff,   /* Lavender purple */
+        #ff6f61    /* Coral red again for smooth looping */
+    );
+    background-size: 300%; /* Make the gradient scroll more smoothly */
+    filter: blur(6px); /* Add a blur effect */
+    border-radius: 15px; /* Match the pill's rounded shape */
+    opacity: 0; /* Start invisible */
+    transform: scale(0.9); /* Slightly scaled down initially */
+    animation: gradient-animation 3s infinite; /* Optional gradient animation */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and scale-in effect */
+}
+
+/* Visible state for gradient-pill */
+.gradient-pill.visible {
+    opacity: 1; /* Fully visible */
+    transform: scale(1); /* Full size */
+}
+
+/* Optional: Gradient background animation */
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+/* Second TV Lip */
+.second-lip {
+    width: calc(75% - 60px); /* Same width as the main-box */
+    height: calc((100vh - 140px) * 0.45); /* Adjust height to fit below the main-box */
+    background-color: #ffffff; /* Same background as the main-box */
+    border-radius: 8px; /* Match the rounded corners of the main-box */
+    position: absolute; /* Absolute positioning to place it precisely */
+    top: calc(80px + (100vh - 140px) * 0.55 + 20px); /* Place below the main-box with some spacing */
+    left: calc(50% + 30px); /* Center horizontally and shift 30px to the right */
+    transform: translateX(-50%); /* Maintain alignment */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for a consistent design */
+    z-index: 10; /* Ensure it appears above the background but below other elements */
+    display: flex; /* Flexbox for content alignment */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+
+
+
+
+
+
+
+
+
+.main-box {
+    width: calc(75% - 60px);
+    height: calc((100vh - 140px) * 0.55);
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 80px auto; /* Center horizontally */
+    padding: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative; /* Needed for positioning nearby elements */
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* Allow the tv-lip to be visible if placed inside later */
+    box-sizing: border-box;
+    z-index: 1; /* Ensure it's below the tv-lip */
+}
+
+
+
+
+
+
+
+
+.tv-lip img {
+    width: 40px; /* Larger size for the GIF */
+    height: auto; /* Maintain aspect ratio */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Truly center it */
+    display: none; /* Initially hidden */
+}
+
+
+
+
+        .button-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            color: #333;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 10px;
+            width: 95%;
+            font-family: 'Ubuntu Mono', monospace;
+            font-size: 1.2em;
+            cursor: pointer;
+            text-align: left;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .button.selected {
+            box-shadow: 0 0 15px orange;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: transparent;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+
+        .server-icon {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .button.selected .dot {
+            background-color: orange;
+            box-shadow: 0 0 8px orange;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="banner">Linux Command Interface</div>
+    <div class="vertical-box">
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                top
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                kill
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                ifconfig
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                ping
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                ssh
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                scp
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                curl
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                diff
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                head
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                tail
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="main-box">
+        <div class="content-area"></div> <!-- Video container -->
+    </div>
+    <div class="tv-lip"></div> <!-- The floating pill -->
+    <div class="tv-lip second-lip"></div> <!-- Second TV Lip -->
+
+    
+    
+    
+    
+
+    <script>
+       
+       function selectButton(button) {
+    // Remove selection from all buttons
+    document.querySelectorAll('.button').forEach((btn) => {
+        btn.classList.remove('selected');
+        btn.querySelector('.dot').style.backgroundColor = 'transparent';
+    });
+
+    // Add selection to the clicked button
+    button.classList.add('selected');
+    button.querySelector('.dot').style.backgroundColor = 'orange';
+
+    // Get the TV lip container
+    const lip = document.querySelector('.tv-lip');
+
+    // Remove any existing gradient pill or loading image
+    const existingGradient = lip.querySelector('.gradient-pill');
+    if (existingGradient) {
+        existingGradient.remove();
+    }
+
+    const existingLoadingImage = lip.querySelector('.loading-gif');
+    if (existingLoadingImage) {
+        existingLoadingImage.remove();
+    }
+
+    // Add the loading.gif first
+    let loadingImage = lip.querySelector('img');
+    if (!loadingImage) {
+        loadingImage = document.createElement('img');
+        loadingImage.src = 'loading.gif'; // Path to your loading.gif
+        loadingImage.classList.add('loading-gif');
+        lip.appendChild(loadingImage);
+    }
+    loadingImage.style.display = 'block';
+
+    // After 1.5 seconds, replace the loading.gif with the gradient
+    setTimeout(() => {
+        // Hide the loading.gif
+        loadingImage.style.opacity = 0;
+        setTimeout(() => {
+            loadingImage.remove(); // Remove it after fade-out
+        }, 500); // Wait for the opacity transition to complete
+
+        // Add the gradient pill
+        const gradientPill = document.createElement('div');
+        gradientPill.classList.add('gradient-pill');
+        lip.appendChild(gradientPill);
+
+        // Add a slight delay to trigger the transition for the gradient
+        setTimeout(() => {
+            gradientPill.classList.add('visible');
+        }, 50);
+    }, 1500); // 1.5-second delay for the loading GIF
+
+    // Simulate loading for 1.5 seconds before video plays
+    setTimeout(() => {
+        const contentArea = document.querySelector('.content-area');
+        contentArea.innerHTML = ''; // Clear existing content
+
+        // Create and display the video element
+        const video = document.createElement('video');
+        video.src = ${button.textContent.trim()}.mp4; // Set the video source based on the button text
+        video.controls = true; // Enable video controls
+        video.autoplay = true; // Auto-play the video
+        video.style.width = '100%'; // Make the video fit the content area
+        video.style.height = '100%'; // Stretch to the height of the content area
+        video.style.borderRadius = '8px'; // Optional: add rounded corners to the video
+
+        contentArea.appendChild(video);
+    }, 3000); // 3-second total delay for the entire process
+}
+
+
+
+    </script>
+</body>
+</html>

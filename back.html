@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Command Interface</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .banner {
+            width: 100%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1.5em;
+            font-family: 'Ubuntu Mono', monospace;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+        }
+
+        .vertical-box {
+    width: 25%;
+    height: calc(100vh - 100px); /* Increased height to fill the space better */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
+    margin-top: 80px; /* Prevents clipping under the ribbon */
+    margin-left: 20px;
+    margin-bottom: 20px; /* Ensures a gap between the box and the bottom edge */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    gap: 10px;
+    overflow: hidden;
+}
+
+
+/* Default content-area styles */
+/* Default content-area styles */
+/* Default content-area styles (with placeholder gradient) */
+.content-area {
+    flex: 1;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden;
+
+    /* Initial placeholder gradient */
+    background: linear-gradient(45deg, orange, purple);
+    background-size: 200% 200%;
+    animation: gradient-animation 5s infinite ease-in-out; /* Gradient animation on page load */
+}
+
+/* Fade-to-white animation */
+.fade-to-white {
+    animation: fadeToWhite 1s forwards; /* Smooth transition to white */
+}
+
+/* Fade animation keyframes */
+@keyframes fadeToWhite {
+    0% {
+        background: linear-gradient(45deg, orange, purple); /* Start with gradient */
+        background-size: 200% 200%; /* Matches the gradient animation */
+    }
+    100% {
+        background: white; /* End with solid white */
+    }
+}
+
+/* Gradient animation for placeholder */
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+
+
+
+
+
+/* TV lip container */
+.tv-lip {
+    width: 120px; /* Width of the pill */
+    height: 30px; /* Height of the pill */
+    background-color: #ffffff; /* Pill background */
+    border-radius: 15px; /* Fully rounded pill shape */
+    position: absolute; /* Positioned relative to the viewport or closest ancestor */
+    top: calc(80px + calc((100vh - 140px) * 0.55) - 15px); /* Position it relative to the main-box */
+    left: 62.2%; /* Center horizontally */
+    transform: translateX(-50%); /* Ensure horizontal centering */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for floating effect */
+    z-index: 10; /* Ensure it floats above the main-box */
+    display: flex; /* Flex to center the content */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent content from overflowing */
+}
+
+/* Shared gradient pill styles */
+/* Red-Orange gradient pill */
+/* Shared gradient pill styles */
+.gradient-pill {
+    width: 90%; /* Consistent width */
+    height: 70%; /* Consistent height */
+    border-radius: 15px; /* Fully rounded pill shape */
+    opacity: 0; /* Start invisible */
+    transform: scale(0.9); /* Slightly shrink initially */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth visibility transition */
+    filter: blur(6px); /* Frosted glass effect */
+    backdrop-filter: blur(10px); /* Stronger blur for frosted look */
+}
+
+/* Red-Orange gradient pill */
+.red-gradient {
+    background: linear-gradient(45deg, red, orange);
+    background-size: 200%;
+    animation: red-orange-gradient-animation 3s infinite alternate; /* Pulsing red gradient */
+    opacity: 1; /* Fully visible initially */
+    transform: scale(1); /* Full size */
+}
+
+/* Red-Orange gradient animation */
+@keyframes red-orange-gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Rainbow gradient pill */
+.gradient-pill:not(.red-gradient) {
+    background: linear-gradient(45deg, 
+        #ff6f61, /* Coral red */
+        #ffcc33, /* Sunny yellow */
+        #33cc99, /* Mint green */
+        #6699ff, /* Sky blue */
+        #cc66ff, /* Lavender purple */
+        #ff6f61  /* Coral red again */
+    );
+    background-size: 300%;
+    animation: gradient-animation 3s infinite; /* Infinite gradient animation */
+    filter: blur(6px); /* Frosted glass effect */
+    backdrop-filter: blur(10px); /* Stronger blur for frosted look */
+}
+
+/* Rainbow gradient animation */
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Visible state for gradients */
+.gradient-pill.visible {
+    opacity: 1; /* Fully visible */
+    transform: scale(1); /* Full size */
+}
+
+
+
+
+
+
+
+/* Second TV Lip */
+.second-lip {
+    width: calc(75% - 60px); /* Same width as the main-box */
+    height: calc((100vh - 140px) * 0.45); /* Same height as the main-box */
+    background-color: #ffffff; /* Keep the same background */
+    border-radius: 8px; /* Keep rounded corners */
+    position: absolute; /* For absolute positioning */
+    top: calc(80px + (100vh - 140px) * 0.55 + 40px);
+
+    left: calc(63.2%); /* Shift it slightly to the right */
+    transform: translateX(-50%); /* Maintain centering */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    z-index: 10; /* Ensure visibility above other elements */
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+
+
+
+
+
+
+
+
+
+
+.main-box {
+    width: calc(75% - 60px);
+    height: calc((100vh - 140px) * 0.55);
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 80px auto; /* Center horizontally */
+    padding: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative; /* Needed for positioning nearby elements */
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* Allow the tv-lip to be visible if placed inside later */
+    box-sizing: border-box;
+    z-index: 1; /* Ensure it's below the tv-lip */
+}
+
+
+
+
+
+
+
+
+.tv-lip img {
+    width: 40px; /* Larger size for the GIF */
+    height: auto; /* Maintain aspect ratio */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Truly center it */
+    display: none; /* Initially hidden */
+}
+
+
+
+
+        .button-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            color: #333;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 10px;
+            width: 95%;
+            font-family: 'Ubuntu Mono', monospace;
+            font-size: 1.2em;
+            cursor: pointer;
+            text-align: left;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .button.selected {
+            box-shadow: 0 0 15px orange;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: transparent;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+
+        .server-icon {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .button.selected .dot {
+            background-color: orange;
+            box-shadow: 0 0 8px orange;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="banner">Linux Command Interface</div>
+    <div class="vertical-box">
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                top
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                kill
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                ifconfig
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                ping
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                ssh
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                scp
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                curl
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                diff
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                head
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="selectButton(this)">
+                tail
+                <img src="servericon.png" alt="Server Icon" class="server-icon">
+                <div class="dot"></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="main-box">
+        <div class="content-area"></div> <!-- Video container -->
+    </div>
+    <div class="tv-lip"></div> <!-- The floating pill -->
+    <div class="tv-lip second-lip"></div> <!-- Second TV Lip -->
+
+    
+    
+    
+    
+
+    <script>
+     function selectButton(button) {
+    // Remove selection from all buttons
+    document.querySelectorAll('.button').forEach((btn) => {
+        btn.classList.remove('selected');
+        btn.querySelector('.dot').style.backgroundColor = 'transparent';
+    });
+
+    // Add selection to the clicked button
+    button.classList.add('selected');
+    button.querySelector('.dot').style.backgroundColor = 'orange';
+
+    // Clear and reset the content-area
+    const contentArea = document.querySelector('.content-area');
+    contentArea.innerHTML = ''; // Clear any previous content
+    contentArea.style.background = 'white'; // Explicitly set to white
+
+    // Handle the TV lip
+    const lip = document.querySelector('.tv-lip');
+    lip.innerHTML = ''; // Clear the pill content
+
+    // Add the red-orange gradient to the TV lip
+    const redGradient = document.createElement('div');
+    redGradient.classList.add('gradient-pill', 'red-gradient');
+    lip.appendChild(redGradient);
+
+    // Simulate loading time with setTimeout
+    setTimeout(() => {
+        // Remove the red-orange gradient
+        redGradient.remove();
+
+        // Add the rainbow gradient pill
+        const rainbowGradient = document.createElement('div');
+        rainbowGradient.classList.add('gradient-pill');
+        lip.appendChild(rainbowGradient);
+
+        // Make the rainbow gradient visible
+        setTimeout(() => {
+            rainbowGradient.classList.add('visible'); // Trigger the visibility transition
+        }, 50); // Slight delay for the visibility transition
+
+        // Load and display the video
+        const video = document.createElement('video');
+        video.src = `${button.textContent.trim()}.mp4`; // Dynamic video source
+        video.controls = true; // Add video controls
+        video.autoplay = true; // Auto-play the video
+        video.style.width = '100%'; // Fit the video to the content area
+        video.style.height = '100%'; // Stretch the video to the content area
+        video.style.borderRadius = '8px'; // Optional: add rounded corners
+        contentArea.appendChild(video);
+    }, 1500); // 1.5-second delay for the red-orange gradient
+}
+
+
+    </script>
+</body>
+</html>
